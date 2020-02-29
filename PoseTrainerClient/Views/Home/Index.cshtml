@@ -1,0 +1,93 @@
+﻿@model IEnumerable<PoseTrainerClient.ViewModels.ExerciseVM>;
+@inject PoseTrainerClient.Services.AccountClient _accountClient;
+
+@{
+    ViewData["Title"] = "Antrenorul tău exclusiv";
+    var member = await _accountClient.GetCurrentClient();
+}
+
+<div class="box">
+    <div class="header container-fluid">
+        <div class="container p-1 d-flex flex-row align-items-center justify-content-between">
+            <div class="font-italic">
+                <h2>MY TRAINER</h2>
+            </div>
+            @if (member != null)
+            {
+                <div class="d-flex flex-row align-items-center" style="color:cyan; font-family:'Nunito', sans-serif">
+                    <i class="fa fa-user-circle-o" style="font-size:35px;"></i> <a href="#" id="popi" class="d-inline-block nav-link" style="color:cyan;" data-toggle="popover" data-placement="bottom" title="Some tooltip text!" data-content="Some Content!">@member.UserName</a>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div id="pageContent" class="page-content">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <canvas id="canvas" style="position:absolute; transform: rotateY(180deg); -webkit-transform: rotateY(180deg); -moz-transform: rotateY(180deg);"></canvas>
+            <div class="alert alert-light alert-dismissible warning" id="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <p class="text-center">Atentie!</p><p class="text-center" id="alertMessage">mesaj.</p>
+            </div>
+            <video id="video" autoplay style="display: none; position:absolute; transform: rotateY(180deg); -webkit-transform: rotateY(180deg); -moz-transform: rotateY(180deg);"></video>
+        </div>
+    </div>
+    <div class="note w-100 p-3 d-flex flex-row align-content-center justify-content-center">
+        <div id="exercise" class="exercise d-flex flex-column flex-sm-row justify-content-between align-items-center">
+            <div id="details">
+                <p class="exerciseType">Alege exercițiul</p>
+                @if (Model.Any())
+                {
+                    <select id="selectExercise" class="form-control">
+                        @foreach (var item in Model)
+                        {
+                            <option value="@item.Script">
+                                @item.Name
+                            </option>
+                        }
+
+                    </select>
+                }
+                else
+                {
+                    <p class="font-italic" style="color:cyan;"><i class="fa fa-ban"></i> Nu există exerciții disponibile</p>
+                }
+            </div>
+            <button id="start" class="btn start">Începe exercițiul</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (member == null)
+    {
+        <script>
+            location.href = "../Account/Login";
+        </script>
+    }
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({
+                html: true
+            })
+        });
+
+        var popi = document.getElementById("popi");
+
+        popi.title = '<span class="text-center d-block">Contul meu</span>';
+        popi.setAttribute("data-content",
+            '<!DOCTYPE html><html>' +
+            '<a href="#" class="d-block text-center text-dark">Mergi la istoric</a>' +
+            '<br />' +
+            '<a href="Account/Logout" class="btn start">Deconectare</a></html>');
+
+    </script>
+    <script src="~/js/poseTrainer.js"></script>
+    <!--script src="~/js/bicepCurl.js"></!--script>-->
+    @if (!Model.Any())
+    {
+        <script>
+            var start = document.getElementById("start");
+            start.disabled = true;
+        </script>
+    }
+}
