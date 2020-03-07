@@ -1,5 +1,4 @@
-﻿@model IEnumerable<PoseTrainerClient.ViewModels.ExerciseVM>;
-@inject PoseTrainerClient.Services.AccountClient _accountClient;
+﻿@inject PoseTrainerClient.Services.AccountClient _accountClient;
 
 @{
     ViewData["Title"] = "Antrenorul tău exclusiv";
@@ -31,29 +30,8 @@
             <video id="video" autoplay style="display: none; position:absolute; transform: rotateY(180deg); -webkit-transform: rotateY(180deg); -moz-transform: rotateY(180deg);"></video>
         </div>
     </div>
-    <div class="note w-100 p-3 d-flex flex-row align-content-center justify-content-center">
-        <div id="exercise" class="exercise d-flex flex-column flex-sm-row justify-content-between align-items-center">
-            <div id="details">
-                <p class="exerciseType">Alege exercițiul</p>
-                @if (Model.Any())
-                {
-                    <select id="selectExercise" class="form-control">
-                        @foreach (var item in Model)
-                        {
-                            <option value="@item.Script">
-                                @item.Name
-                            </option>
-                        }
-
-                    </select>
-                }
-                else
-                {
-                    <p class="font-italic" style="color:cyan;"><i class="fa fa-ban"></i> Nu există exerciții disponibile</p>
-                }
-            </div>
-            <button id="start" class="btn start">Începe exercițiul</button>
-        </div>
+    <div class="note w-100 p-3">
+        <div id="noteContent" class="w-100 d-flex flex-row align-content-center justify-content-center"></div>
     </div>
 </div>
 
@@ -82,12 +60,10 @@
 
     </script>
     <script src="~/js/poseTrainer.js"></script>
-    <!--script src="~/js/bicepCurl.js"></!--script>-->
-    @if (!Model.Any())
-    {
-        <script>
-            var start = document.getElementById("start");
-            start.disabled = true;
-        </script>
-    }
+    <script>
+        $.get("/Home/ChooseExercise", function (response) {
+            $("#noteContent").html(response);
+            resizeElements();
+        });
+    </script>
 }

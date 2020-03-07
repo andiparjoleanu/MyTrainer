@@ -5,7 +5,6 @@
     var elbow;
 
     var side = "left";
-    var leftLastAngle = { value: 0 }, rightLastAngle = { value: 0 };
 
     while (side !== "") {
         if (side.localeCompare("left") === 0) {
@@ -81,6 +80,8 @@
             }
 
             var status;
+            var direction;
+            var prevAngle;
 
             if (side.localeCompare("left") === 0) {
                 status = leftStatus;
@@ -96,7 +97,8 @@
                     status.moved = false;
                 }
                 else {
-                    if (status.goalAchieved)                //at the end of a rep
+                    //at the end of a rep
+                    if (status.goalAchieved)                
                     {
                         status.reps = status.reps + 1;
                         counter.innerHTML = status.reps;
@@ -121,27 +123,29 @@
             }
             else if (armTorsoAngle >= 20 && armTorsoAngle <= 85)
             {
-                if (upperArmForearmAngle < 160) {
-                    alertMessage.innerHTML = "Nu ai ținut brațele drepte";
-                    myalert.style.display = "block";
-                    setTimeout(function () {
-                        myalert.style.display = "none";
-                    }, 3000);
-                    status.repStarted = false;
-                    status.goalAchieved = false;
-                    status.moved = false;
-                }
-                else {
-                    if (!status.moved) {
-                        status.moved = true;
+                if (status.repStarted) {
+                    if (upperArmForearmAngle < 160) {
+                        alertMessage.innerHTML = "Nu ai ținut brațele drepte";
+                        myalert.style.display = "block";
+                        setTimeout(function () {
+                            myalert.style.display = "none";
+                        }, 3000);
+                        status.repStarted = false;
+                        status.goalAchieved = false;
+                        status.moved = false;
+                    }
+                    else {
+                        if (!status.moved) {
+                            status.moved = true;
+                        }
                     }
                 }
+                
             }
             else if (armTorsoAngle > 85 && armTorsoAngle < 95) {
                 if (upperArmForearmAngle >= 170) {
                     if (status.repStarted) {
                         status.goalAchieved = true;
-                        status.moved = false;
                     }
                 }  
             }

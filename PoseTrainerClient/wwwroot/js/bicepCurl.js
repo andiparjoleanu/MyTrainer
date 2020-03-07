@@ -5,7 +5,6 @@
     var hip;
 
     var side = "left";
-    var leftLastAngle = { value: 0 }, rightLastAngle = { value: 0 };
 
     while (side !== "") {
         if (side.localeCompare("left") === 0) {
@@ -81,16 +80,16 @@
 
             if (upperArmForearmAngle > 165) {
                 if (upperArmTorsoAngle < 30) {
+
+                    //at the beggining of a rep
                     if (!status.repStarted) {
-                        //at the beggining of a rep
                         status.repStarted = true;
                         status.goalAchieved = false;
                         status.moved = false;
                     }
-                    else
-                    {
-                        if (status.goalAchieved)                //at the end of a rep
-                        {
+                    else {
+                        //at the end of a rep
+                        if (status.goalAchieved) {
                             status.reps = status.reps + 1;
                             counter.innerHTML = status.reps;
                             status.repStarted = false;
@@ -98,6 +97,8 @@
                             status.moved = false;
                         }
                         else {
+
+                            //rep started and arms are significantly moved 
                             if (status.moved) {
                                 alertMessage.innerHTML = "Nu ai ridicat antebratul suficient de sus!";
                                 myalert.style.display = "block";
@@ -125,11 +126,11 @@
                 }
             }
             else
-                if (upperArmForearmAngle > 30)     //intermediate steps
-                {
-                    if (upperArmTorsoAngle >= 30) {
-                        if (status.repStarted)                   //during the rep
-                        {
+                //intermediate steps
+                if (upperArmForearmAngle > 30) {
+                    if (status.repStarted) {
+                        if (upperArmTorsoAngle >= 30) {
+                            //during the rep
                             alertMessage.innerHTML = "Ai miscat bratul prea mult!";
                             myalert.style.display = "block";
                             setTimeout(function () {
@@ -138,21 +139,24 @@
                             status.repStarted = false;
                             status.goalAchieved = false;
                             status.moved = false;
+
+                        }
+                        else {
+                            if (!status.moved) {
+                                status.moved = true;
+                            }
                         }
                     }
-                    else {
-                        if (!status.moved) {
-                            status.moved = true;
-                        }
-                    }
+                    
                 }
-                else                                   //positive goal
+                else                                   
                 {
+                    //positive goal
                     if (upperArmTorsoAngle < 30) {
-                        if (status.repStarted)                    //goal achieved
-                        {
+
+                        //goal achieved
+                        if (status.repStarted) {
                             status.goalAchieved = true;
-                            status.moved = false;
                         }
                     }
                     else {

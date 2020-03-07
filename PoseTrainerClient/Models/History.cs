@@ -12,7 +12,7 @@ namespace PoseTrainerClient.Models
         public string ExerciseId { get; set; }
         public virtual Exercise Exercise { get; set; }
         public DateTime Date { get; set; }
-        public int NoRepsLeft { get; set; }
-        public int NoRepsRight { get; set; }
+        public UnilateralExercisesHistory UnilateralExercisesHistory { get; set; }
+        public BilateralExercisesHistory BilateralExercisesHistory { get; set; }
     }
 }

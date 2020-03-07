@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PoseTrainerClient.Models;
 using PoseTrainerClient.Services;
 using PoseTrainerClient.ViewModels;
@@ -26,15 +27,60 @@ namespace PoseTrainerClient.Controllers
             _accountClient = accountClient;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            List<ExerciseVM> exercises = await _homeClient.GetAllExercises();
-            return View(exercises);
-        }
-
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChooseExercise()
+        {
+            List<ExerciseVM> exercises = await _homeClient.GetAllExercises();
+            return PartialView(exercises);
+        }
+
+        [HttpGet]
+        public IActionResult CounterUnilateralExercises()
+        {
+            return PartialView();
+        }
+
+        [HttpGet]
+        public IActionResult CounterBilateralExercises()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public async Task SaveRepsUnilateral(UnilateralRepsVM convertedData)
+        {
+            var user = await _accountClient.GetCurrentClient();
+
+            UnilateralExercisesHistoryVM unilateralExercisesHistory = new UnilateralExercisesHistoryVM
+            {
+                 Reps = convertedData.Reps,
+                 ExerciseId = convertedData.ExerciseId,
+                 UserId = user.UserId
+            };
+
+            await _homeClient.SaveRepsUnilateral(unilateralExercisesHistory);
+        }
+
+        [HttpPost]
+        public async Task SaveRepsBilateral(BilateralRepsVM convertedData)
+        {
+            var user = await _accountClient.GetCurrentClient();
+
+            BilateralExercisesHistoryVM bilateralExercisesHistory = new BilateralExercisesHistoryVM
+            {
+                LeftSideReps = convertedData.LeftSideReps,
+                RightSideReps = convertedData.RightSideReps,
+                ExerciseId = convertedData.ExerciseId,
+                UserId = user.UserId
+            };
+
+            await _homeClient.SaveRepsBilateral(bilateralExercisesHistory);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

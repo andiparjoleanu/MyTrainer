@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace PoseTrainerClient.ViewModels
 {
-    public class UserVM
+    public class BilateralExercisesHistoryVM
     {
         public string UserId { get; set; }
-        public string UserName { get; set; }
+        public string ExerciseId { get; set; }
+        public int LeftSideReps { get; set; }
+        public int RightSideReps { get; set; }
     }
 }

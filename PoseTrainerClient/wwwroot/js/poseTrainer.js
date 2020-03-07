@@ -14,37 +14,40 @@ var pageContent = document.getElementById("pageContent");
 
 var header = document.getElementsByClassName("header")[0];
 
+var width = pageContent.offsetWidth;
+var height = pageContent.offsetHeight;
+
 var video = document.getElementById('video');
-video.width = pageContent.offsetWidth;
-video.height = pageContent.offsetHeight;
+video.width = width;
+video.height = height;
 
 
 var canvas = document.getElementById('canvas');
 
 canvas.style.top = header.offsetHeight + "px";
-canvas.width = pageContent.offsetWidth;
-canvas.height = pageContent.offsetHeight;
+canvas.width = width;
+canvas.height = height;
 
 var ctx = canvas.getContext('2d');
-var width = pageContent.offsetWidth;
-var height = pageContent.offsetHeight;
 ctx.canvas.width = width;
 ctx.canvas.height = height;
 
 var myalert = document.getElementById("alert");
 var alertMessage = document.getElementById("alertMessage");
 
-window.addEventListener("resize", function () {
+function resizeElements() {
     width = pageContent.offsetWidth;
     height = pageContent.offsetHeight;
-    
-    canvas.width = pageContent.offsetWidth;
-    canvas.height = pageContent.offsetHeight;
-    ctx.canvas.width = pageContent.offsetWidth;
-    ctx.canvas.height = pageContent.offsetHeight;
-    video.width = pageContent.offsetWidth;
-    video.height = pageContent.offsetHeight;
-});
+
+    canvas.width = width;
+    canvas.height = height; 
+    ctx.canvas.width = width;
+    ctx.canvas.height = height;
+    video.width = width;
+    video.height = height;
+};
+
+window.addEventListener("resize", resizeElements);
 
 // The detected positions will be inside an array
 let poses = [];
@@ -132,101 +135,6 @@ function drawKeypoints() {
 }
 
 var exercise;
-
-window.onload = function () {
-    var exerciseDetails = document.getElementById("exercise");
-    var startButton = document.getElementById("start");
-    var details = document.getElementById("details");
-    var selectExercise = document.getElementById("selectExercise");
-
-    startButton.onclick = function () {
-        exerciseDetails.removeChild(startButton);
-        exerciseDetails.removeChild(details);
-
-        exercise = document.createElement("script");
-        exercise.setAttribute('src', selectExercise.value);
-        document.body.appendChild(exercise);
-
-        var exerciseDetailsCounters = document.createElement("div");
-        exerciseDetailsCounters.id = "counters";
-        exerciseDetailsCounters.classList.add("d-flex");
-        exerciseDetailsCounters.classList.add("flex-row");
-        exerciseDetailsCounters.classList.add("align-items-center");
-        exerciseDetailsCounters.classList.add("justify-content-between");
-        exerciseDetailsCounters.style.width = "66%";
-
-        var countLeftContainer = document.createElement("div");
-        countLeftContainer.style.display = "flex";
-        countLeftContainer.style.flexDirection = "column";
-        countLeftContainer.style.justifyContent = "center";
-        countLeftContainer.style.alignItems = "center";
-        countLeftContainer.classList.add("mr-2");
-
-
-        var countLeftLabel = document.createElement("p");
-        countLeftLabel.innerHTML = "Repetări stânga";
-        countLeftLabel.style.textAlign = "center";
-        countLeftLabel.style.color = "white";
-        countLeftLabel.style.fontSize = "18px";
-        countLeftContainer.appendChild(countLeftLabel);
-
-        var counterLeft = document.createElement("p");
-        counterLeft.id = "counterLeft";
-        counterLeft.innerHTML = "0";
-        counterLeft.style.color = "cyan";
-        counterLeft.style.fontSize = "25px";
-        countLeftContainer.appendChild(counterLeft);
-
-        exerciseDetailsCounters.appendChild(countLeftContainer);
-
-        var countRightContainer = document.createElement("div");
-        countRightContainer.style.display = "flex";
-        countRightContainer.style.flexDirection = "column";
-        countRightContainer.style.justifyContent = "center";
-        countRightContainer.style.alignItems = "center";
-        countRightContainer.classList.add("ml-2");
-
-        var countRightLabel = document.createElement("p");
-        countRightLabel.innerHTML = "Repetări dreapta";
-        countRightLabel.style.textAlign = "center";
-        countRightLabel.style.color = "white";
-        countRightLabel.style.fontSize = "18px";
-        countRightContainer.appendChild(countRightLabel);
-
-        var counterRight = document.createElement("p");
-        counterRight.id = "counterRight";
-        counterRight.innerHTML = "0";
-        counterRight.style.color = "cyan";
-        counterRight.style.fontSize = "25px";
-        countRightContainer.appendChild(counterRight);
-
-        exerciseDetailsCounters.appendChild(countRightContainer);
-
-        exerciseDetails.appendChild(exerciseDetailsCounters);
-
-        var stopButton = document.createElement("button");
-        exerciseDetails.appendChild(stopButton);
-        stopButton.classList.add("btn");
-        stopButton.classList.add("start");
-        stopButton.innerHTML = "Finalizează";
-        stopButton.onclick = function () {
-            exerciseDetails.removeChild(stopButton);
-            exerciseDetails.removeChild(exerciseDetailsCounters);
-            exerciseDetails.appendChild(details);
-            exerciseDetails.appendChild(startButton);
-
-            leftStatus = new Status(false, false, 0);
-            rightStatus = new Status(false, false, 0);
-
-            document.body.removeChild(exercise);
-            evaluate = function () { };
-            countStarted = false;
-        }
-
-        countStarted = true;
-        //side = selectPart.value;
-    };
-}
 
 function dotProduct(vector1, vector2) {
     var result = vector1.x * vector2.x + vector1.y * vector2.y;

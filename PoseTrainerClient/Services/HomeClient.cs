@@ -30,5 +30,39 @@ namespace PoseTrainerClient.Services
                 return new List<ExerciseVM>();
             }
         }
+
+        public async Task<ResultVM> SaveRepsUnilateral(UnilateralExercisesHistoryVM reps)
+        {
+            try
+            {
+                ResultVM resultVM = await HttpMethods<UnilateralExercisesHistoryVM>.PostAsync(Client, reps, "/SaveRepsUnilateral");
+                return resultVM;
+            }
+            catch (Exception ex)
+            {
+                return new ResultVM { 
+                    Message = ex.Message,
+                    Status = Status.Error
+                };
+            }
+        }
+
+        public async Task<ResultVM> SaveRepsBilateral(BilateralExercisesHistoryVM reps)
+        {
+            try
+            {
+                ResultVM resultVM = await HttpMethods<BilateralExercisesHistoryVM>.PostAsync(Client, reps, "/SaveRepsBilateral");
+                return resultVM;
+            }
+            catch (Exception ex)
+            {
+                return new ResultVM
+                {
+                    Message = ex.Message,
+                    Status = Status.Error
+                };
+            }
+        }
     }
+
 }
